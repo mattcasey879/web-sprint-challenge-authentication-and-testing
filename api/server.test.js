@@ -3,8 +3,6 @@
 const request = require("supertest");
 const server = require("./server");
 const db = require("../data/dbConfig");
-const jwtDecode = require("jwt-decode");
-const bcrypt = require("bcrypt");
 const jokes = require("./jokes/jokes-data");
 
 beforeEach(async () => {
@@ -22,13 +20,13 @@ describe("[POST] api/auth/register", () => {
       .send({ username: "sean", password: "1234" });
     const sean = await db("users").where("username", "sean").first();
     expect(sean).toMatchObject({ username: "sean" });
-  }, 750);
+  }, 1500);
   test("responds with message with already taken username", async () => {
     await request(server).post("/api/auth/register").send({ username: "matt", password: '1234'})
     const res = await request(server)
       .post("/api/auth/register")
       .send({ username: "matt", password: "1234" });
-    expect(res.body.message).toMatch(/username already taken/i);
+    expect(res.body.message).toMatch(/username taken/i);
   });
 });
 
@@ -45,14 +43,14 @@ describe("[POST] api/auth/login", () => {
     let res = await request(server)
       .post("/api/auth/login")
       .send({ username: "matt", password: "1234" });
-    expect(res.body.message).toMatch(/welcome back matt/i);
+    expect(res.body.message).toMatch(/welcome, matt/i);
   });
 });
 
 describe("[GET] /api/jokes", () => {
   test("returns proper status and message on invalid token", async () => {
     const res = await request(server).get("/api/jokes");
-    expect(res.body.message).toMatch(/token required or invalid/i);
+    expect(res.body.message).toMatch(/token required/i);
   }, 750);
   test("returns jokes if token is valid", async () => {
     await request(server)

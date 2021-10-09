@@ -1,4 +1,17 @@
+const JwtSecret = process.env.JWT_SECRET || 'fallback'
+const jwt = require('jsonwebtoken')
+
 module.exports = (req, res, next) => {
+  const token = req.headers.authorization
+  if(!token) {
+    next({ status: 401, message: "token required" })
+  } 
+  jwt.verify(token, JwtSecret, (err, decoded) => {
+    if(err) {
+      next({ status: 401, message: 'token invlaid'})
+    }
+    req.decoded = decoded
+  })
   next();
   /*
     IMPLEMENT
