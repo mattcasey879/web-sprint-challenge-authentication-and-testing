@@ -5,7 +5,7 @@ async function findBy(filter) {
 }
 
 async function findById(id) {
-    return await db("users").where('id', id)
+    return await db("users").where('id', id).first()
 }
 
 async function add(user) {
