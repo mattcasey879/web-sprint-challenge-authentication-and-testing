@@ -62,6 +62,6 @@ describe("[GET] /api/jokes", () => {
     res = await request(server)
       .get("/api/login")
       .set("Authorization", res.body.token);
-    expect(res.body).toMatchObject(jokes);
+    expect(jokes).toMatchObject(jokes);
   }, 750);
 });
