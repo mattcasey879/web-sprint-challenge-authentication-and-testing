@@ -3,7 +3,7 @@ const router = require('express').Router();
 const jokes = require('./jokes-data');
 
 router.get('/', (req, res) => {
-  res.status(200).json(joks);
+  res.status(200).json(jokes);
 });
 
 module.exports = router;
